@@ -1,211 +1,107 @@
-
-from ortb.core import Serializable
-
-
-class NativeAdCreative(Serializable):
-    """Native Ad Creative"""
-
-    def __init__(self, args={}):
-        # Required
-        self.native = args['native'] if 'native' in args else None
-        """Top level Native object"""
+from ortb.core import OrtbObject, OrtbArray
 
 
-class Native(Serializable):
-    """Native object"""
+class EventTracker(OrtbObject):
 
-    # Required
-    assets = []
-    """List of native ad’s assets."""
+    _required = {
+        'event': int,
+        'method': int,
+    }
 
-    link = None
-    """ Destination Link. This is default link object for the ad.
-        Individual assets can also have a link object which applies
-        if the asset is activated (clicked).
-        If the asset doesn’t have a link object, the parent link object applies.
-        See LinkObject Definition
-    """
-
-    # Optional
-    ver = 1
-    """Version of the Native Markup version in use."""
-
-    imptrackers = []
-    """ Array of impression tracking URLs, expected to return a 1x1 image or 204 response -
-        typically only passed when using 3rd party trackers."""
-
-    jstracker = None
-    """ Optional JavaScript impression tracker.
-        This is a valid HTML, Javascript is already wrapped in <script> tags.
-        It should be executed at impression time where it can be supported."""
-
-    ext = None
-    """Placeholder for exchange-specific extensions to OpenRTB"""
-
-    def __init__(self, args={}):
-        for key, val in args.items():
-            if 'link' == key:
-                self.link = Link(val)
-            elif 'assets' == key:
-                self.assets = []
-                for asset in val:
-                    self.assets.append(Asset(asset))
-            else:
-                setattr(self, key, val)
+    _optional = {
+        'url': str,
+        'customdata': str,
+        'ext': str,
+    }
 
 
-class Asset(Serializable):
-    """Asset object. Asset object may contain only one of title, img, data or video."""
+class Link(OrtbObject):
 
-    # Required
-    id = None
-    """Unique asset ID, assigned by exchange, must match one of the asset IDs in request"""
+    _required = {
+        'url': str,
+    }
 
-    # Optional
-    required = 0
-    """Set to 1 if asset is required."""
-
-    title = None
-    """Title object for title assets. See Title Object definition."""
-
-    img = None
-    """Image object for image assets. See Image Object definition."""
-
-    video = None
-    """ Video object for video assets. See Video Object definition.
-        Note that in-stream video ads are not part of Native.
-        Native ads may contain a video as the ad creative itself.
-    """
-
-    data = None
-    """Data object for ratings, prices etc."""
-
-    link = None
-    """ Link object for call to actions. The link object applies
-        if the asset item is activated (clicked).
-        If there is no link object on the asset, the parent link object on the bid response applies.
-    """
-
-    ext = None
-    """ Placeholder for exchange-specific extensions to OpenRTB.
-        Bidders are encouraged not to use asset.ext for exchanging text assets.
-        Use data.ext with custom type instead.
-    """
-
-    def __init__(self, args={}):
-        for key, val in args.items():
-            if 'title' == key:
-                self.title = Title(val)
-            elif 'img' == key:
-                self.img = Image(val)
-            elif 'video' == key:
-                self.video = Video(val)
-            elif 'data' == key:
-                self.data = Data(val)
-            elif 'link' == key:
-                self.link = Link(val)
-            else:
-                setattr(self, key, val)
+    _optional = {
+        'clicktrackers': OrtbArray(str),
+        'fallback': str,
+        'ext': str,
+    }
 
 
-class Title(Serializable):
-    """Title object"""
+class Video(OrtbObject):
 
-    # Required
-    text = None
-    """The text associated with the text element."""
-
-    # Optional
-    ext = None
-    """Placeholder for exchange-specific extensions to OpenRTB"""
-
-    def __init__(self, args={}):
-        for key, val in args.items():
-            setattr(self, key, val)
+    _required = {
+        'vasttag': str,
+    }
 
 
-class Image(Serializable):
-    """Image object"""
+class Data(OrtbObject):
 
-    # Required
-    url = None
-    """URL of the image asset."""
+    _required = {
+        'value': str,
+    }
 
-    # Recommended
-    w = None
-    """Width of the image in pixels."""
-
-    h = None
-    """Height of the image in pixels."""
-
-    # Optional
-    ext = None
-    """Placeholder for exchange-specific extensions to OpenRTB"""
-
-    def __init__(self, args={}):
-        for key, val in args.items():
-            setattr(self, key, val)
+    _optional = {
+        'type': int,
+        'len': int,
+        'ext': str,
+    }
 
 
-class Data(Serializable):
-    """Data object"""
+class Image(OrtbObject):
 
-    # Required
-    value = None
-    """ The formatted string of data to be displayed.
-        Can contain a formatted value such as “5 stars” or “$10” or “3.4 stars out of 5”
-    """
+    _required = {
+        'url': str,
+    }
 
-    # Optional
-    label = None
-    """The optional formatted string name of the data type to be displayed."""
-
-    ext = None
-    """Placeholder for exchange-specific extensions to OpenRTB"""
-
-    def __init__(self, args={}):
-        for key, val in args.items():
-            setattr(self, key, val)
+    _optional = {
+        'type': int,
+        'w': int,
+        'h': int,
+        'ext': str,
+    }
 
 
-class Video(Serializable):
-    """ Video object. Corresponds to the Video Object in the request,
-        yet containing a value of a conforming VAST tag as a value.
-    """
+class Title(OrtbObject):
 
-    # Required
-    vasttag = None
-    """VAST xml."""
+    _required = {
+        'text': str,
+    }
 
-    def __init__(self, args={}):
-        for key, val in args.items():
-            setattr(self, key, val)
+    _optional = {
+        'len': int,
+        'ext': str,
+    }
 
 
-class Link(Serializable):
-    """Used for ‘call to action’ assets, or other links from the Native ad.
-    This Object should be associated to its peer object in the parent Asset Object or
-    as the master link in the top level Native Ad response object.
-    When that peer object is activated (clicked) the action should take the user
-    to the location of the link.
-    """
+class Asset(OrtbObject):
 
-    # Required
-    url = None
-    """Landing URL of the clickable link."""
+    _optional = {
+        'id': int,
+        'required': int,
+        'title': Title,
+        'img': Image,
+        'video': Video,
+        'data': Data,
+        'link': Link,
+        'ext': str,
+    }
 
-    # Optional
-    clicktrackers = []
-    """List of third-party tracker URLs to be fired on click of the URL."""
 
-    fallback = None
-    """ Fallback URL for deeplink.
-        To be used if the URL given in url is not supported by the device.
-    """
+class NativeMarkup(OrtbObject):
 
-    ext = None
-    """Placeholder for exchange-specific extensions to OpenRTB"""
+    _required = {
+        'link': Link,
+    }
 
-    def __init__(self, args={}):
-        for key, val in args.items():
-            setattr(self, key, val)
+    _optional = {
+        'ver': str,
+        'assets': OrtbArray(Asset),
+        'assetsurl': str,
+        'dcourl': str,
+        'imptrackers': OrtbArray(str),
+        'jstracker': str,
+        'eventtrackers': OrtbArray(str),
+        'privacy': str,
+        'ext': str,
+    }
