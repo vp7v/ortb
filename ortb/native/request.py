@@ -1,6 +1,7 @@
 
 from ortb.core import OrtbObject, OrtbArray
 
+
 class Title(OrtbObject):
     """Title object"""
     _required = {
@@ -11,8 +12,11 @@ class Title(OrtbObject):
         'ext': str
     }
 
+
 class Image(OrtbObject):
-    """The Image object to be used for all image elements of the Native ad such as Icons, Main Image, etc."""
+    """ The Image object to be used for all image elements of the Native ad
+        such as Icons, Main Image, etc.
+    """
     _optional = {
         'wmin': int,
         'hmin': int,
@@ -23,8 +27,13 @@ class Image(OrtbObject):
         'ext': str,
     }
 
+
 class Data(OrtbObject):
-    """The Data Object is to be used for all non-core elements of the native unit such as Ratings, Review Count, Stars, Download count, descriptions etc. It is also generic for future of Native elements not contemplated at the time of the writing of this document."""
+    """ The Data Object is to be used for all non-core elements of the native unit
+        such as Ratings, Review Count, Stars, Download count, descriptions etc.
+        It is also generic for future of Native elements not contemplated at the time
+        of the writing of this document.
+    """
     _required = {
         'type': int
     }
@@ -33,6 +42,7 @@ class Data(OrtbObject):
         'len': int,
         'ext': str,
     }
+
 
 class Asset(OrtbObject):
     """Asset object. Asset object may contain only one of title, img, data or video"""
@@ -44,10 +54,11 @@ class Asset(OrtbObject):
         'required': int,
         'title': Title,
         'img': Image,
-        #'video': Video,
+        # 'video': Video,
         'data': Data,
         'ext': str,
     }
+
 
 class NativeMarkupRequest(OrtbObject):
     """Native Markup Request Object"""

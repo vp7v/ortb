@@ -3,6 +3,7 @@ import json
 from ortb.core import OrtbEncoder, OrtbObject, OrtbArray
 from ortb.native.request import NativeMarkupRequest
 
+
 class Site(OrtbObject):
     """ Site """
     _optional = {
@@ -14,10 +15,12 @@ class Site(OrtbObject):
         'domain': str,
     }
 
+
 class Geo(OrtbObject):
     _optional = {
         'country': str,
     }
+
 
 class Device(OrtbObject):
     """ Device """
@@ -32,6 +35,7 @@ class Device(OrtbObject):
         'devicetype': int,
     }
 
+
 class User(OrtbObject):
     """ User """
     _optional = {
@@ -40,6 +44,7 @@ class User(OrtbObject):
         'yob': int,
         'customdata': str,
     }
+
 
 class Native(OrtbObject):
     _required = {
@@ -70,6 +75,7 @@ class Native(OrtbObject):
         fields['request'] = json.dumps(fields['request'], cls=OrtbEncoder)
         return fields
 
+
 class Impression(OrtbObject):
     """ Impression """
     _required = {
@@ -82,6 +88,7 @@ class Impression(OrtbObject):
         'bidfloorcur': str,
         'secure': int,
     }
+
 
 class BidRequest(OrtbObject):
     """ Bid request """
@@ -99,4 +106,3 @@ class BidRequest(OrtbObject):
         'test': int,
         'at': int,
     }
-

@@ -1,6 +1,7 @@
 
 import json
 
+
 class OrtbEncoder(json.JSONEncoder):
     """ JSON Encoder for OrtbObject.
         Most OrtbObjects have repr_json() as return __dict__,
@@ -12,15 +13,17 @@ class OrtbEncoder(json.JSONEncoder):
 
         return json.JSONEncoder.default(self, obj)
 
+
 def OrtbArray(klass):
     """ Array property for OrtbObject.
         For example, 'cat': OrtbArray(str)
     """
     def parser(array):
-        ortb_array = [ klass(item) for item in array ]
+        ortb_array = [klass(item) for item in array]
         return ortb_array
 
     return parser
+
 
 class OrtbObject:
     """ Base OpenRTB object.

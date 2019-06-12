@@ -1,5 +1,6 @@
 
-from ortb.core import OrtbEncoder, OrtbObject, OrtbArray
+from ortb.core import OrtbObject, OrtbArray
+
 
 class Bid(OrtbObject):
     """Bid object"""
@@ -17,11 +18,13 @@ class Bid(OrtbObject):
         'crid': str,
     }
 
+
 class SeatBid(OrtbObject):
     """ Seat bid """
     _required = {
         'bid': OrtbArray(Bid),
     }
+
 
 class BidResponse(OrtbObject):
     """ Bid response """
@@ -34,4 +37,3 @@ class BidResponse(OrtbObject):
         'bidid': str,
         'cur': str,
     }
-

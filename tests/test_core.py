@@ -1,7 +1,8 @@
 from unittest import TestCase
 import json
 
-from core import OrtbEncoder, OrtbArray, OrtbObject
+from ortb.core import OrtbEncoder, OrtbArray, OrtbObject
+
 
 class TestCore(TestCase):
 
