@@ -1,8 +1,55 @@
 import json
 
 from ortb.core import OrtbEncoder, OrtbObject, OrtbArray
-from ortb.native.request import NativeMarkupRequest
+from ortb.native.request import NativeMarkup
 
+class Segment(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'value': str,
+        'ext': str,
+    }
+
+class Data(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'segment': OrtbArray(Segment),
+        'ext': str,
+    }
+
+class Geo(OrtbObject):
+    _optional = {
+        'lat': float,
+        'lon': float,
+        'type': int,
+        'accuracy': int,
+        'lastfix': int,
+        'ipservice': int,
+        'country': str,
+        'region': str,
+        'regionfips104': str,
+        'metro': str,
+        'city': str,
+        'zip': str,
+        'utcoffset': int,
+        'ext': str,
+    }
+
+class User(OrtbObject):
+
+    _optional = {
+        'id': str,
+        'buyeruid': str,
+        'yob': int,
+        'gender': str,
+        'keywords': str,
+        'customdata': str,
+        'geo': Geo,
+        'data': OrtbArray(Data),
+        'ext': str,
+    }
 
 class Site(OrtbObject):
     """ Site """
@@ -16,10 +63,6 @@ class Site(OrtbObject):
     }
 
 
-class Geo(OrtbObject):
-    _optional = {
-        'country': str,
-    }
 
 
 class Device(OrtbObject):
@@ -36,19 +79,11 @@ class Device(OrtbObject):
     }
 
 
-class User(OrtbObject):
-    """ User """
-    _optional = {
-        'id': str,
-        'buyeruid': str,
-        'yob': int,
-        'customdata': str,
-    }
 
 
 class Native(OrtbObject):
     _required = {
-        'request': NativeMarkupRequest,
+        'request': NativeMarkup,
     }
 
     _optional = {

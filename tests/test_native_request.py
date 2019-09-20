@@ -3,7 +3,7 @@ import json
 from ortb.native.request import NativeMarkup, Asset, Title, Image, Video, Data, EventTrackers
 
 
-class TestNativeResponse(TestCase):
+class TestNativeRequest(TestCase):
     dataEventTrackers = {
         'event': 2,
         'methods': [3, 4],
