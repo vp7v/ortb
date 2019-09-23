@@ -172,7 +172,33 @@ class Site(OrtbObject):
         'ext': str,
     }
 
+class Deal(OrtbObject):
+    _optional = {
+        'id': str,
+        'bidfloor': float,
+        'bidfloorcur': str,
+        'at': int,
+        'wseat': OrtbArray(str),
+        'wadomain': OrtbArray(str),
+        'ext': str,
+    }
 
+class Pmp(OrtbObject):
+    _optional = {
+        'private_auction': int,
+        'deals': OrtbArray(Deal),
+        'ext': str,
+    }
+
+class Format(OrtbObject):
+    _optional = {
+        'w': int,
+        'h': int,
+        'wratio': int,
+        'hratio': int,
+        'wmin': int,
+        'ext': str,
+    }
 
 class Native(OrtbObject):
     _required = {
@@ -181,8 +207,8 @@ class Native(OrtbObject):
 
     _optional = {
         'ver': str,
-        'api': str,
-        'battr': str,
+        'api': OrtbArray(int),
+        'battr': OrtbArray(int),
         'ext': str,
     }
 
@@ -203,6 +229,86 @@ class Native(OrtbObject):
         fields['request'] = json.dumps(fields['request'], cls=OrtbEncoder)
         return fields
 
+class Banner(OrtbObject):
+    _optional = {
+        'format': OrtbArray(Format),
+        'w': int,
+        'h': int,
+        'wmax': int,
+        'wmin': int,
+        'hmax': int,
+        'hmin': int,
+        'btype': OrtbArray(int),
+        'battr': OrtbArray(int),
+        'pos': int,
+        'mimes': OrtbArray(str),
+        'topframe': int,
+        'expdir': OrtbArray(int),
+        'api': OrtbArray(str),
+        'id': str,
+        'vcm': int,
+        'ext': str,
+    }
+
+class Audio(OrtbObject):
+    _required = {
+        'mimes': OrtbArray(str),
+    }
+
+    _optional = {
+        'minduration': int,
+        'maxduration': int,
+        'protocols': OrtbArray(int),
+        'startdelay': int,
+        'sequence': int,
+        'battr': OrtbArray(int),
+        'maxextended': int,
+        'minbitrate': int,
+        'bitrate': int,
+        'delivery': OrtbArray(int),
+        'companionad': OrtbArray(Banner),
+        'api': OrtbArray(int),
+        'companiontype': OrtbArray(int),
+        'maxseq': int,
+        'feed': int,
+        'stitched': int,
+        'nvol': int,
+        'ext': str,
+    }
+
+class Video(OrtbObject):
+    _required = {
+        'mimes': OrtbArray(str),
+    }
+
+    _optional = {
+        'minduration': int,
+        'maxduration': int,
+        'protocols': OrtbArray(int),
+        'protocol': int,
+        'w': int,
+        'h': int,
+        'startdelay': int,
+        'placement': int,
+        'linearity': int,
+        'skip': int,
+        'skipmin': int,
+        'skipafter': int,
+        'sequence': int,
+        'battr': OrtbArray(int),
+        'maxextended': int,
+        'minbitrate': int,
+        'maxbitrate': int,
+        'boxingallowed': int,
+        'playbackmethod': OrtbArray(int),
+        'playbackend': int,
+        'delivery': OrtbArray(int),
+        'pos': int,
+        'companionad': OrtbArray(Banner),
+        'api': OrtbArray(int),
+        'companiontype': OrtbArray(int),
+        'ext': str,
+    }
 
 class Impression(OrtbObject):
     """ Impression """

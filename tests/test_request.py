@@ -1,6 +1,6 @@
 from unittest import TestCase
 import json
-from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, Publisher, App, Site
+from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, Publisher, App, Site, Deal, Pmp, Format, Banner, Audio, Video
 
 
 class TestRequest(TestCase):
@@ -163,6 +163,105 @@ class TestRequest(TestCase):
         'ext': 'site_ext',
     }
 
+    dataDeal = {
+        'id': 'deal_id',
+        'bidfloor': 31.31,
+        'bidfloorcur': 'deal_bidfloorcur',
+        'at': 32,
+        'wseat': ['deal_wseat1', 'deal_wseat2'],
+        'wadomain': ['deal_wadomain1', 'deal_wadomain2'],
+        'ext': 'deal_ext',
+
+    }
+
+    dataPmp = {
+        'private_auction': 33,
+        'deals': [dataDeal],
+        'ext': 'pmp_ext',
+    }
+
+    dataFormat = {
+        'w': 34,
+        'h': 35,
+        'wratio': 36,
+        'hratio': 37,
+        'wmin': 38,
+        'ext': 'format_ext',
+    }
+
+    dataBanner = {
+        'format': [dataFormat],
+        'w': 60,
+        'h': 61,
+        'wmax': 62,
+        'hmax': 63,
+        'wmin': 64,
+        'hmin': 65,
+        'btype': [66, 67],
+        'battr': [68, 69],
+        'pos': 70,
+        'mimes': ['banner_mime1', 'banner_mime2'],
+        'topframe': 71,
+        'expdir': [72, 73],
+        'api': [74, 75],
+        'id': 'banner_id',
+        'vcm': 76,
+        'ext': 'banner_ext',
+    }
+
+    dataAudio = {
+        'mimes': ['audio_mime1', 'audio_mime2'],
+        'minduration': 39,
+        'maxduration': 40,
+        'protocols': [41, 42],
+        'startdelay': 43,
+        'sequence': 44,
+        'battr': [45, 46],
+        'maxextended': 47,
+        'minbitrate': 48,
+        'bitrate': 49,
+        'delivery': [50, 51],
+        'companionad': [dataBanner],
+        'api': [52, 53],
+        'companiontype': [54, 55],
+        'maxseq': 56,
+        'feed': 57,
+        'stitched': 58,
+        'nvol': 59,
+        'ext': 'audio_ext',
+    }
+
+    dataVideo = {
+        'mimes': ['video_mime1', 'video_mime2'],
+        'minduration': 100,
+        'maxduration': 101,
+        'protocols': [102, 103],
+        'protocol': 104,
+        'w': 105,
+        'h': 106,
+        'startdelay': 107,
+        'placement': 108,
+        'linearity': 109,
+        'skip': 110,
+        'skipmin': 111,
+        'skipafter': 112,
+        'sequence': 113,
+        'battr': [114, 115],
+        'maxextended': 116,
+        'minbitrate': 117,
+        'maxbitrate': 118,
+        'boxingallowed': 119,
+        'playbackmethod': [120, 121],
+        'playbackend': 122,
+        'delivery': [123, 124],
+        'pos': 125,
+        'companionad': [dataBanner],
+        'api': [126, 127],
+        'companiontype': [128, 129],
+        'ext': 'video_ext',
+
+    }
+
     def getObject(self, cls, data):
         j = json.dumps(data)
         obj = cls.from_json(j)
@@ -235,3 +334,38 @@ class TestRequest(TestCase):
 
         self.assertIsInstance(obj.publisher, Publisher)
         self.assertIsInstance(obj.content, Content)
+
+    def test_Deal(self):
+        obj = self.getObject(Deal, self.dataDeal)
+        self.checkBasicFields(obj, self.dataDeal)
+
+        self.assertEqual(obj.wseat, self.dataDeal['wseat'])
+        self.assertEqual(obj.wadomain, self.dataDeal['wadomain'])
+
+    def test_Pmp(self):
+        obj = self.getObject(Pmp, self.dataPmp)
+        self.checkBasicFields(obj, self.dataPmp)
+
+        self.assertIsInstance(obj.deals[0], Deal)
+
+    def test_Format(self):
+        obj = self.getObject(Format, self.dataFormat)
+        self.checkBasicFields(obj, self.dataFormat)
+
+    def test_Banner(self):
+        obj = self.getObject(Banner, self.dataBanner)
+        self.checkBasicFields(obj, self.dataBanner)
+
+        self.assertIsInstance(obj.format[0], Format)
+
+    def test_Audio(self):
+        obj = self.getObject(Audio, self.dataAudio)
+        self.checkBasicFields(obj, self.dataAudio)
+
+        self.assertIsInstance(obj.companionad[0], Banner)
+
+    def test_Video(self):
+        obj = self.getObject(Video, self.dataVideo)
+        self.checkBasicFields(obj, self.dataVideo)
+
+        self.assertIsInstance(obj.companionad[0], Banner)
