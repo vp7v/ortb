@@ -1,12 +1,11 @@
-from unittest import TestCase
+from tests.core import TestCaseOrtb
 import json
 from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, \
     Publisher, App, Site, Deal, Pmp, Format, Native, Banner, Audio, Video, \
     Metric, Imp, Regs, Source, BidRequest
 from ortb.native.request import NativeMarkup
 
-
-class TestRequest(TestCase):
+class TestRequest(TestCaseOrtb):
     dataSegment = {
         'id': 'segment_id',
         'name': 'segment_name',
@@ -336,99 +335,70 @@ class TestRequest(TestCase):
         'ext': 'br_ext',
     }
 
-    def getObject(self, cls, data):
-        j = json.dumps(data)
-        obj = cls.from_json(j)
-        return obj
-
-    def checkBasicFields(self, obj, data):
-        """ Avoiding mass copypaste for check every basic field.
-            All others fields must be checked manually.
-        """
-        for key, value in data.items():
-            if type(value) not in (int, str):
-                continue
-
-            self.assertEqual(value, getattr(obj, key))
-
     def test_Segment(self):
-        obj = self.getObject(Segment, self.dataSegment)
-        self.checkBasicFields(obj, self.dataSegment)
+        self.assertOrtbFields(Segment, self.dataSegment)
 
     def test_Data(self):
         obj = self.getObject(Data, self.dataData)
-        self.checkBasicFields(obj, self.dataData)
+        self.checkFields(obj, self.dataData)
 
         self.assertIsInstance(obj.segment[0], Segment)
 
     def test_Geo(self):
-        obj = self.getObject(Geo, self.dataGeo)
-        self.checkBasicFields(obj, self.dataGeo)
+        self.assertOrtbFields(Geo, self.dataGeo)
 
     def test_User(self):
         obj = self.getObject(User, self.dataUser)
-        self.checkBasicFields(obj, self.dataUser)
+        self.checkFields(obj, self.dataUser)
 
         self.assertIsInstance(obj.geo, Geo)
         self.assertIsInstance(obj.data[0], Data)
 
     def test_Device(self):
-        obj = self.getObject(Device, self.dataDevice)
-        self.checkBasicFields(obj, self.dataDevice)
+        self.assertOrtbFields(Device, self.dataDevice)
 
     def test_Producer(self):
-        obj = self.getObject(Producer, self.dataProducer)
-        self.checkBasicFields(obj, self.dataProducer)
-
-        self.assertEqual(obj.cat, self.dataProducer['cat'])
+        self.assertOrtbFields(Producer, self.dataProducer)
 
     def test_Content(self):
         obj = self.getObject(Content, self.dataContent)
-        self.checkBasicFields(obj, self.dataContent)
+        self.checkFields(obj, self.dataContent)
 
         self.assertIsInstance(obj.producer, Producer)
         self.assertIsInstance(obj.data[0], Data)
 
     def test_Publisher(self):
-        obj = self.getObject(Publisher, self.dataPublisher)
-        self.checkBasicFields(obj, self.dataPublisher)
-
-        self.assertEqual(obj.cat, self.dataPublisher['cat'])
+        self.assertOrtbFields(Publisher, self.dataPublisher)
 
     def test_App(self):
         obj = self.getObject(App, self.dataApp)
-        self.checkBasicFields(obj, self.dataApp)
+        self.checkFields(obj, self.dataApp)
 
         self.assertIsInstance(obj.publisher, Publisher)
         self.assertIsInstance(obj.content, Content)
 
     def test_Site(self):
         obj = self.getObject(Site, self.dataSite)
-        self.checkBasicFields(obj, self.dataSite)
+        self.checkFields(obj, self.dataSite)
 
         self.assertIsInstance(obj.publisher, Publisher)
         self.assertIsInstance(obj.content, Content)
 
     def test_Deal(self):
-        obj = self.getObject(Deal, self.dataDeal)
-        self.checkBasicFields(obj, self.dataDeal)
-
-        self.assertEqual(obj.wseat, self.dataDeal['wseat'])
-        self.assertEqual(obj.wadomain, self.dataDeal['wadomain'])
+        self.assertOrtbFields(Deal, self.dataDeal)
 
     def test_Pmp(self):
         obj = self.getObject(Pmp, self.dataPmp)
-        self.checkBasicFields(obj, self.dataPmp)
+        self.checkFields(obj, self.dataPmp)
 
         self.assertIsInstance(obj.deals[0], Deal)
 
     def test_Format(self):
-        obj = self.getObject(Format, self.dataFormat)
-        self.checkBasicFields(obj, self.dataFormat)
+        self.assertOrtbFields(Format, self.dataFormat)
 
     def test_Native(self):
         obj = self.getObject(Native, self.dataNative)
-        self.checkBasicFields(obj, self.dataNative)
+        self.checkFields(obj, self.dataNative)
 
         self.assertIsInstance(obj.request, NativeMarkup)
 
@@ -438,29 +408,29 @@ class TestRequest(TestCase):
 
     def test_Banner(self):
         obj = self.getObject(Banner, self.dataBanner)
-        self.checkBasicFields(obj, self.dataBanner)
+        self.checkFields(obj, self.dataBanner)
 
         self.assertIsInstance(obj.format[0], Format)
 
     def test_Audio(self):
         obj = self.getObject(Audio, self.dataAudio)
-        self.checkBasicFields(obj, self.dataAudio)
+        self.checkFields(obj, self.dataAudio)
 
         self.assertIsInstance(obj.companionad[0], Banner)
 
     def test_Video(self):
         obj = self.getObject(Video, self.dataVideo)
-        self.checkBasicFields(obj, self.dataVideo)
+        self.checkFields(obj, self.dataVideo)
 
         self.assertIsInstance(obj.companionad[0], Banner)
 
     def test_Metric(self):
         obj = self.getObject(Metric, self.dataMetric)
-        self.checkBasicFields(obj, self.dataMetric)
+        self.checkFields(obj, self.dataMetric)
 
     def test_Imp(self):
         obj = self.getObject(Imp, self.dataImp)
-        self.checkBasicFields(obj, self.dataImp)
+        self.checkFields(obj, self.dataImp)
 
         self.assertIsInstance(obj.metric[0], Metric)
         self.assertIsInstance(obj.banner, Banner)
@@ -470,16 +440,14 @@ class TestRequest(TestCase):
         self.assertIsInstance(obj.pmp, Pmp)
 
     def test_Source(self):
-        obj = self.getObject(Source, self.dataSource)
-        self.checkBasicFields(obj, self.dataSource)
+        self.assertOrtbFields(Source, self.dataSource)
 
     def test_Regs(self):
-        obj = self.getObject(Regs, self.dataRegs)
-        self.checkBasicFields(obj, self.dataRegs)
+        self.assertOrtbFields(Regs, self.dataRegs)
 
     def test_BidRequest(self):
         obj = self.getObject(BidRequest, self.dataBidRequest)
-        self.checkBasicFields(obj, self.dataBidRequest)
+        self.checkFields(obj, self.dataBidRequest)
 
         self.assertIsInstance(obj.imp[0], Imp)
         self.assertIsInstance(obj.site, Site)
@@ -488,11 +456,3 @@ class TestRequest(TestCase):
         self.assertIsInstance(obj.user, User)
         self.assertIsInstance(obj.source, Source)
         self.assertIsInstance(obj.regs, Regs)
-
-        self.assertEqual(obj.wseat, self.dataBidRequest['wseat'])
-        self.assertEqual(obj.bseat, self.dataBidRequest['bseat'])
-        self.assertEqual(obj.cur, self.dataBidRequest['cur'])
-        self.assertEqual(obj.wlang, self.dataBidRequest['wlang'])
-        self.assertEqual(obj.bcat, self.dataBidRequest['bcat'])
-        self.assertEqual(obj.badv, self.dataBidRequest['badv'])
-        self.assertEqual(obj.bapp, self.dataBidRequest['bapp'])

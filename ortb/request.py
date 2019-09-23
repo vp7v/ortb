@@ -254,7 +254,7 @@ class Banner(OrtbObject):
         'mimes': OrtbArray(str),
         'topframe': int,
         'expdir': OrtbArray(int),
-        'api': OrtbArray(str),
+        'api': OrtbArray(int),
         'id': str,
         'vcm': int,
         'ext': str,

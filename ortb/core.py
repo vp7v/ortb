@@ -37,7 +37,7 @@ class OrtbObject:
         data = json.loads(str_json)
         return klass(data)
 
-    def __init__(self, fields):
+    def __init__(self, fields={}):
         for field, cls in self._required.items():
             if field in fields and fields[field] is not None:
                 value = cls(fields[field])
