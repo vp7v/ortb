@@ -217,11 +217,6 @@ class Native(OrtbObject):
             # native.request could be json string or ready object
             fields['request'] = json.loads(fields['request'])
 
-        if 'native' in fields['request']:
-            # In old versions of OpenRTB object NativeMarkupRequest
-            # could be presented as a single property 'native'
-            fields['request'] = fields['request']['native']
-
         super().__init__(fields)
 
     def repr_json(self):
@@ -310,33 +305,79 @@ class Video(OrtbObject):
         'ext': str,
     }
 
-class Impression(OrtbObject):
-    """ Impression """
+class Metric(OrtbObject):
+    _required = {
+        'type': str,
+        'value': float,
+    }
+
+    _optional = {
+        'vendor': str,
+        'ext': str,
+    }
+
+class Imp(OrtbObject):
     _required = {
         'id': str,
     }
 
     _optional = {
+        'metric': OrtbArray(Metric),
+        'banner': Banner,
+        'video': Video,
+        'audio': Audio,
         'native': Native,
-        'bidfloor': str,
+        'pmp': Pmp,
+        'displaymanager': str,
+        'displaymanagerver': str,
+        'instl': int,
+        'tagid': str,
+        'bidfloor': float,
         'bidfloorcur': str,
+        'clickbrowser': int,
         'secure': int,
+        'iframebuster': OrtbArray(str),
+        'exp': int,
+        'ext': str,
     }
 
+class Regs(OrtbObject):
+    _optional = {
+        'coppa': int,
+        'ext': str,
+    }
+
+class Source(OrtbObject):
+    _optional = {
+        'fd': int,
+        'tid': str,
+        'pchain': str,
+        'ext': str,
+    }
 
 class BidRequest(OrtbObject):
-    """ Bid request """
     _required = {
         'id': str,
-        'imp': OrtbArray(Impression),
+        'imp': OrtbArray(Imp),
     }
 
     _optional = {
         'site': Site,
+        'app': App,
         'device': Device,
         'user': User,
-        'badv': OrtbArray(str),
-        'bcat': OrtbArray(str),
         'test': int,
         'at': int,
+        'tmax': int,
+        'wseat': OrtbArray(str),
+        'bseat': OrtbArray(str),
+        'allimps': int,
+        'cur': OrtbArray(str),
+        'wlang': OrtbArray(str),
+        'bcat': OrtbArray(str),
+        'badv': OrtbArray(str),
+        'bapp': OrtbArray(str),
+        'source': Source,
+        'regs': Regs,
+        'ext': str,
     }

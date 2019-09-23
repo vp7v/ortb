@@ -1,7 +1,7 @@
 from unittest import TestCase
 import json
-from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, Publisher, App, Site, Deal, Pmp, Format, Banner, Audio, Video
-
+from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, Publisher, App, Site, Deal, Pmp, Format, Native, Banner, Audio, Video, Metric, Imp, Regs, Source, BidRequest
+from ortb.native.request import NativeMarkup
 
 class TestRequest(TestCase):
     dataSegment = {
@@ -189,6 +189,14 @@ class TestRequest(TestCase):
         'ext': 'format_ext',
     }
 
+    dataNative = {
+        'request': {'assets': [{'id': 200}]},
+        'ver': 'native_ver',
+        'api': [201, 202],
+        'battr': [203, 204],
+        'ext': 'native_ext',
+    }
+
     dataBanner = {
         'format': [dataFormat],
         'w': 60,
@@ -260,6 +268,69 @@ class TestRequest(TestCase):
         'companiontype': [128, 129],
         'ext': 'video_ext',
 
+    }
+
+    dataMetric = {
+        'type': 'metric_type',
+        'value': 301.301,
+        'vendor': 'metric_vendor',
+        'ext': 'metric_ext',
+    }
+
+    dataImp = {
+        'id': 'imp_id',
+        'metric': [dataMetric],
+        'banner': dataBanner,
+        'video': dataVideo,
+        'audio': dataAudio,
+        'native': dataNative,
+        'pmp': dataPmp,
+        'displaymanager': 'imp_displaymanager',
+        'displaymanagerver': 'imp_displaymanagerver',
+        'instl': 401,
+        'tagid': 'imp_tagid',
+        'bidfloor': 402.402,
+        'bidfloorcur': 'imp_bidfloorcur',
+        'clickbrowser': 403,
+        'secure': 404,
+        'iframebuster': ['imp_iframebuster1', 'imp_iframebuster2'],
+        'exp': 405,
+        'ext': 'imp_ext',
+    }
+
+    dataRegs = {
+        'coppa': 501,
+        'ext': 'regs_ext',
+    }
+
+    dataSource = {
+        'fd': 601,
+        'tid': 'source_tid',
+        'pchain': 'source_pchain',
+        'ext': 'source_ext',
+    }
+
+    dataBidRequest = {
+        'id': 'br_id',
+        'imp': [dataImp],
+        'site': dataSite,
+        'app': dataApp,
+        'device': dataDevice,
+        'user': dataUser,
+        'test': 601,
+        'at': 602,
+        'tmax': 603,
+        'wseat': ['br_wseat1', 'br_wseat2'],
+        'bseat': ['br_bseat1', 'br_bseat2'],
+        'allimps': 604,
+        'cur': ['br_cur1', 'br_cur2'],
+        'wlang': ['br_wlang1', 'br_wlang2'],
+        'bcat': ['br_bcat1', 'br_bcat2'],
+        'badv': ['br_badv1', 'br_badv2'],
+        'bapp': ['br_bapp1', 'br_bapp2'],
+        'source': dataSource,
+        'regs': dataRegs,
+        'ext': 'br_ext',
     }
 
     def getObject(self, cls, data):
@@ -352,6 +423,16 @@ class TestRequest(TestCase):
         obj = self.getObject(Format, self.dataFormat)
         self.checkBasicFields(obj, self.dataFormat)
 
+    def test_Native(self):
+        obj = self.getObject(Native, self.dataNative)
+        self.checkBasicFields(obj, self.dataNative)
+
+        self.assertIsInstance(obj.request, NativeMarkup)
+
+        self.dataNative['request'] = json.dumps(self.dataNative['request'])
+        obj = self.getObject(Native, self.dataNative)
+        self.assertIsInstance(obj.request, NativeMarkup)
+
     def test_Banner(self):
         obj = self.getObject(Banner, self.dataBanner)
         self.checkBasicFields(obj, self.dataBanner)
@@ -369,3 +450,47 @@ class TestRequest(TestCase):
         self.checkBasicFields(obj, self.dataVideo)
 
         self.assertIsInstance(obj.companionad[0], Banner)
+
+    def test_Metric(self):
+        obj = self.getObject(Metric, self.dataMetric)
+        self.checkBasicFields(obj, self.dataMetric)
+
+    def test_Imp(self):
+        obj = self.getObject(Imp, self.dataImp)
+        self.checkBasicFields(obj, self.dataImp)
+
+        self.assertIsInstance(obj.metric[0], Metric)
+        self.assertIsInstance(obj.banner, Banner)
+        self.assertIsInstance(obj.video, Video)
+        self.assertIsInstance(obj.audio, Audio)
+        self.assertIsInstance(obj.native, Native)
+        self.assertIsInstance(obj.pmp, Pmp)
+
+    def test_Source(self):
+        obj = self.getObject(Source, self.dataSource)
+        self.checkBasicFields(obj, self.dataSource)
+
+    def test_Regs(self):
+        obj = self.getObject(Regs, self.dataRegs)
+        self.checkBasicFields(obj, self.dataRegs)
+
+
+    def test_BidRequest(self):
+        obj = self.getObject(BidRequest, self.dataBidRequest)
+        self.checkBasicFields(obj, self.dataBidRequest)
+
+        self.assertIsInstance(obj.imp[0], Imp)
+        self.assertIsInstance(obj.site, Site)
+        self.assertIsInstance(obj.app, App)
+        self.assertIsInstance(obj.device, Device)
+        self.assertIsInstance(obj.user, User)
+        self.assertIsInstance(obj.source, Source)
+        self.assertIsInstance(obj.regs, Regs)
+
+        self.assertEqual(obj.wseat, self.dataBidRequest['wseat'])
+        self.assertEqual(obj.bseat, self.dataBidRequest['bseat'])
+        self.assertEqual(obj.cur, self.dataBidRequest['cur'])
+        self.assertEqual(obj.wlang, self.dataBidRequest['wlang'])
+        self.assertEqual(obj.bcat, self.dataBidRequest['bcat'])
+        self.assertEqual(obj.badv, self.dataBidRequest['badv'])
+        self.assertEqual(obj.bapp, self.dataBidRequest['bapp'])
