@@ -51,33 +51,126 @@ class User(OrtbObject):
         'ext': str,
     }
 
-class Site(OrtbObject):
-    """ Site """
-    _optional = {
-        'id': str,
-        'page': str,
-        'ref': str,
-        'cat': OrtbArray(str),
-        'name': str,
-        'domain': str,
-    }
-
-
-
-
 class Device(OrtbObject):
-    """ Device """
     _optional = {
-        'dnt': int,
         'ua': str,
-        'ip': str,
         'geo': Geo,
-        'language': str,
+        'dnt': int,
+        'lmt': int,
+        'ip': str,
+        'ipv6': str,
+        'devicetype': int,
+        'make': str,
+        'model': str,
         'os': str,
         'osv': str,
-        'devicetype': int,
+        'hwv': str,
+        'h': int,
+        'w': int,
+        'ppi': int,
+        'pxratio': float,
+        'js': int,
+        'geofetch': int,
+        'flashver': str,
+        'language': str,
+        'carrier': str,
+        'mccmnc': str,
+        'connectiontype': int,
+        'ifa': str,
+        'didsha1': str,
+        'didmd5': str,
+        'dpidsha1': str,
+        'dpidmd5': str,
+        'macsha1': str,
+        'macmd5': str,
+        'ext': str,
     }
 
+class Producer(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'cat': OrtbArray(str),
+        'domain': str,
+        'ext': str,
+    }
+
+class Content(OrtbObject):
+    _optional = {
+        'id': str,
+        'episode': int,
+        'title': str,
+        'series': str,
+        'season': str,
+        'artist': str,
+        'genre': str,
+        'album': str,
+        'isrc': str,
+        'producer': Producer,
+        'url': str,
+        'cat': OrtbArray(str),
+        'prodq': int,
+        'videoquality': int,
+        'context': int,
+        'contentrating': str,
+        'userrating': str,
+        'qagmediarating': int,
+        'keywords': str,
+        'livestream': int,
+        'sourcerelationship': int,
+        'len': int,
+        'language': str,
+        'embeddable': int,
+        'data': OrtbArray(Data),
+        'ext': str,
+    }
+
+class Publisher(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'cat': OrtbArray(str),
+        'domain': str,
+        'ext': str,
+    }
+
+class App(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'bundle': str,
+        'domain': str,
+        'storeurl': str,
+        'cat': OrtbArray(str),
+        'sectioncat': OrtbArray(str),
+        'pagecat': OrtbArray(str),
+        'ver': str,
+        'privacypolicy': int,
+        'paid': int,
+        'publisher': Publisher,
+        'content': Content,
+        'keywords': str,
+        'ext': str,
+    }
+
+class Site(OrtbObject):
+    _optional = {
+        'id': str,
+        'name': str,
+        'domain': str,
+        'cat': OrtbArray(str),
+        'sectioncat': OrtbArray(str),
+        'pagecat': OrtbArray(str),
+        'page': str,
+        'ref': str,
+        'search': str,
+        'mobile': int,
+        'privacypolicy': int,
+        'publisher': Publisher,
+        'content': Content,
+        'keywords': str,
+        'ext': str,
+    }
 
 
 
