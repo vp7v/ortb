@@ -1,7 +1,10 @@
 from unittest import TestCase
 import json
-from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, Publisher, App, Site, Deal, Pmp, Format, Native, Banner, Audio, Video, Metric, Imp, Regs, Source, BidRequest
+from ortb.request import Segment, Data, Geo, User, Device, Producer, Content, \
+    Publisher, App, Site, Deal, Pmp, Format, Native, Banner, Audio, Video, \
+    Metric, Imp, Regs, Source, BidRequest
 from ortb.native.request import NativeMarkup
+
 
 class TestRequest(TestCase):
     dataSegment = {
@@ -473,7 +476,6 @@ class TestRequest(TestCase):
     def test_Regs(self):
         obj = self.getObject(Regs, self.dataRegs)
         self.checkBasicFields(obj, self.dataRegs)
-
 
     def test_BidRequest(self):
         obj = self.getObject(BidRequest, self.dataBidRequest)

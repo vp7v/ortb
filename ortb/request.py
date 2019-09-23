@@ -3,6 +3,7 @@ import json
 from ortb.core import OrtbEncoder, OrtbObject, OrtbArray
 from ortb.native.request import NativeMarkup
 
+
 class Segment(OrtbObject):
     _optional = {
         'id': str,
@@ -11,6 +12,7 @@ class Segment(OrtbObject):
         'ext': str,
     }
 
+
 class Data(OrtbObject):
     _optional = {
         'id': str,
@@ -18,6 +20,7 @@ class Data(OrtbObject):
         'segment': OrtbArray(Segment),
         'ext': str,
     }
+
 
 class Geo(OrtbObject):
     _optional = {
@@ -37,6 +40,7 @@ class Geo(OrtbObject):
         'ext': str,
     }
 
+
 class User(OrtbObject):
 
     _optional = {
@@ -50,6 +54,7 @@ class User(OrtbObject):
         'data': OrtbArray(Data),
         'ext': str,
     }
+
 
 class Device(OrtbObject):
     _optional = {
@@ -86,6 +91,7 @@ class Device(OrtbObject):
         'ext': str,
     }
 
+
 class Producer(OrtbObject):
     _optional = {
         'id': str,
@@ -94,6 +100,7 @@ class Producer(OrtbObject):
         'domain': str,
         'ext': str,
     }
+
 
 class Content(OrtbObject):
     _optional = {
@@ -125,6 +132,7 @@ class Content(OrtbObject):
         'ext': str,
     }
 
+
 class Publisher(OrtbObject):
     _optional = {
         'id': str,
@@ -133,6 +141,7 @@ class Publisher(OrtbObject):
         'domain': str,
         'ext': str,
     }
+
 
 class App(OrtbObject):
     _optional = {
@@ -153,6 +162,7 @@ class App(OrtbObject):
         'ext': str,
     }
 
+
 class Site(OrtbObject):
     _optional = {
         'id': str,
@@ -172,6 +182,7 @@ class Site(OrtbObject):
         'ext': str,
     }
 
+
 class Deal(OrtbObject):
     _optional = {
         'id': str,
@@ -183,12 +194,14 @@ class Deal(OrtbObject):
         'ext': str,
     }
 
+
 class Pmp(OrtbObject):
     _optional = {
         'private_auction': int,
         'deals': OrtbArray(Deal),
         'ext': str,
     }
+
 
 class Format(OrtbObject):
     _optional = {
@@ -199,6 +212,7 @@ class Format(OrtbObject):
         'wmin': int,
         'ext': str,
     }
+
 
 class Native(OrtbObject):
     _required = {
@@ -224,6 +238,7 @@ class Native(OrtbObject):
         fields['request'] = json.dumps(fields['request'], cls=OrtbEncoder)
         return fields
 
+
 class Banner(OrtbObject):
     _optional = {
         'format': OrtbArray(Format),
@@ -244,6 +259,7 @@ class Banner(OrtbObject):
         'vcm': int,
         'ext': str,
     }
+
 
 class Audio(OrtbObject):
     _required = {
@@ -270,6 +286,7 @@ class Audio(OrtbObject):
         'nvol': int,
         'ext': str,
     }
+
 
 class Video(OrtbObject):
     _required = {
@@ -305,6 +322,7 @@ class Video(OrtbObject):
         'ext': str,
     }
 
+
 class Metric(OrtbObject):
     _required = {
         'type': str,
@@ -315,6 +333,7 @@ class Metric(OrtbObject):
         'vendor': str,
         'ext': str,
     }
+
 
 class Imp(OrtbObject):
     _required = {
@@ -341,11 +360,13 @@ class Imp(OrtbObject):
         'ext': str,
     }
 
+
 class Regs(OrtbObject):
     _optional = {
         'coppa': int,
         'ext': str,
     }
+
 
 class Source(OrtbObject):
     _optional = {
@@ -354,6 +375,7 @@ class Source(OrtbObject):
         'pchain': str,
         'ext': str,
     }
+
 
 class BidRequest(OrtbObject):
     _required = {
