@@ -1,6 +1,8 @@
 
 import json
 
+class OrtbError(Exception):
+    pass
 
 class OrtbEncoder(json.JSONEncoder):
     """ JSON Encoder for OrtbObject.
@@ -18,11 +20,11 @@ def OrtbArray(klass):
     """ Array property for OrtbObject.
         For example, 'cat': OrtbArray(str)
     """
-    def parser(array):
+    def arrayparser(array):
         ortb_array = [klass(item) for item in array]
         return ortb_array
 
-    return parser
+    return arrayparser
 
 
 class OrtbObject:
@@ -38,17 +40,21 @@ class OrtbObject:
         return klass(data)
 
     def __init__(self, fields={}):
-        for field, cls in self._required.items():
-            if field in fields and fields[field] is not None:
-                value = cls(fields[field])
-                setattr(self, field, value)
-            else:
-                raise ValueError("Missing required field %s in structure %s" % (field, fields))
+        self.setattrs(fields, self._required, True)
+        self.setattrs(fields, self._optional, False)
 
-        for field, cls in self._optional.items():
-            if field in fields and fields[field] is not None:
+    def setattrs(self, fields, proto, required):
+        for field, cls in proto.items():
+            if None == fields.get(field, None):
+                if required:
+                    raise OrtbError(f"Missing required {self.__class__} -> {field}")
+                continue
+
+            try:
                 value = cls(fields[field])
                 setattr(self, field, value)
+            except ValueError:
+                raise OrtbError(f"Error in {self.__class__} -> {field} ({cls.__name__})") from None
 
     def to_json(self):
         return json.dumps(self, cls=OrtbEncoder)
